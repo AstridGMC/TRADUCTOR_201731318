@@ -1,0 +1,298 @@
+[
+  {
+    "funcion": {
+      "VOID": "void",
+      "ID": "Form1",
+      "PARABRE": "(",
+      "parametros": " ",
+      "PARCIERRA": ")",
+      "LLAVEABRE": "{",
+      "sentencia_listado": [
+        {
+          "sentencia": {
+            "variablesManejo": {
+              "tipoDato": "string",
+              "declaracion": {
+                "tipoDato": {
+                  "ID": "nada2"
+                },
+                "PTCOMA": ";"
+              }
+            }
+          }
+        },
+        {
+          "sentencia": {
+            "variablesManejo": {
+              "tipoDato": "int",
+              "declaracion": {
+                "ID": "nada",
+                "IGUAL": "=",
+                "expresion": {
+                  "expCadena": {
+                    "exp": {
+                      "tipo": "double",
+                      "valor": "8"
+                    }
+                  }
+                },
+                "PTCOMA": ";"
+              }
+            }
+          }
+        },
+        {
+          "sentencia": {
+            "variablesManejo": {
+              "tipoDato": "string",
+              "declaracion": {
+                "ID": "dos",
+                "IGUAL": "=",
+                "expresion": {
+                  "expCadena": {
+                    "CADENA": "hola"
+                  }
+                },
+                "PTCOMA": ";"
+              }
+            }
+          }
+        },
+        {
+          "sentencia": {
+            "declaredFuncion": {
+              "ID": "InitializeComponent",
+              "PARIZQ": "(",
+              "paramDeclared": {
+                "IDmas": " ",
+                "PARDER": ")"
+              }
+            },
+            "PTCOMA": ";"
+          }
+        },
+        {
+          "sentencia": {
+            "imprimir": {
+              "IMPRIMIR": "IMPRIMIR",
+              "parAb": "(",
+              "cuerpoImprimir": {
+                "HTMLPROD": "<HTML>"
+              },
+              "parCierra": ")",
+              "pntComa": ";"
+            }
+          }
+        },
+        {
+          "sentencia": {
+            "imprimir": {
+              "IMPRIMIR": "IMPRIMIR",
+              "parAb": "(",
+              "cuerpoImprimir": {
+                "HTMLPROD": "<HEAD>"
+              },
+              "parCierra": ")",
+              "pntComa": ";"
+            }
+          }
+        },
+        {
+          "sentencia": {
+            "imprimir": {
+              "IMPRIMIR": "IMPRIMIR",
+              "parAb": "(",
+              "cuerpoImprimir": {
+                "HTMLPROD": "<TITLE>Practica 1</TITLE>"
+              },
+              "parCierra": ")",
+              "pntComa": ";"
+            }
+          }
+        },
+        {
+          "sentencia": {
+            "imprimir": {
+              "IMPRIMIR": "IMPRIMIR",
+              "parAb": "(",
+              "cuerpoImprimir": {
+                "HTMLPROD": "</HEAD>"
+              },
+              "parCierra": ")",
+              "pntComa": ";"
+            }
+          }
+        }
+      ],
+      "LLAVECIERRA": "}"
+    }
+  },
+  {
+    "tipo": "double",
+    "opciones1": {
+      "Cuerpodeclaracion": {
+        "tipoDato": {
+          "ID": "a"
+        },
+        "PTCOMA": ";"
+      }
+    }
+  },
+  {
+    "tipo": "double",
+    "opciones1": {
+      "Cuerpodeclaracion": {
+        "tipoDato": {
+          "ID": "b"
+        },
+        "PTCOMA": ";"
+      }
+    }
+  },
+  {
+    "tipo": "string",
+    "opciones1": {
+      "Cuerpodeclaracion": {
+        "tipoDato": {
+          "ID": "c"
+        },
+        "PTCOMA": ";"
+      }
+    }
+  },
+  {
+    "funcion": {
+      "VOID": "void",
+      "ID": "btn1_Click",
+      "PARABRE": "(",
+      "parametros": [
+        {
+          "tipoDato": "int"
+        },
+        {
+          "COMA": ",",
+          "tipoDato": "string",
+          "ID": "e"
+        }
+      ],
+      "PARCIERRA": ")",
+      "LLAVEABRE": "{",
+      "sentencia_listado": [
+        {
+          "sentencia": {
+            "sentenciaIfElse": {
+              "ifS": {
+                "IF": "if",
+                "PARABRE": "(",
+                "ExpresionLogica": {
+                  "expCadena": {
+                    "CADENA": "nnn"
+                  },
+                  "relacional": "=="
+                },
+                "PARCIERRA": ")",
+                "LLAVEABRE": "{",
+                "sentenciaListado": [
+                  {
+                    "sentencia": {
+                      "variablesManejo": {
+                        "asignacion": {
+                          "ID": "txtpantalla",
+                          "IGUAL": "=",
+                          "expresion": {
+                            "expCadena": {
+                              "CADENA": "1"
+                            }
+                          },
+                          "PTCOMA": ";"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "sentencia": {
+                      "imprimir": {
+                        "IMPRIMIR": "IMPRIMIR",
+                        "parAb": "(",
+                        "cuerpoImprimir": {
+                          "HTMLPROD": "<BODY style=\"background:white\">"
+                        },
+                        "parCierra": ")",
+                        "pntComa": ";"
+                      }
+                    }
+                  },
+                  {
+                    "sentencia": {
+                      "imprimir": {
+                        "IMPRIMIR": "IMPRIMIR",
+                        "parAb": "(",
+                        "cuerpoImprimir": {
+                          "HTMLPROD": "<H1>Etiqueta h1</H1>"
+                        },
+                        "parCierra": ")",
+                        "pntComa": ";"
+                      }
+                    }
+                  },
+                  {
+                    "sentencia": {
+                      "imprimir": {
+                        "IMPRIMIR": "IMPRIMIR",
+                        "parAb": "(",
+                        "cuerpoImprimir": {
+                          "HTMLPROD": "</BODY>"
+                        },
+                        "parCierra": ")",
+                        "pntComa": ";"
+                      }
+                    }
+                  },
+                  {
+                    "sentencia": {
+                      "imprimir": {
+                        "IMPRIMIR": "IMPRIMIR",
+                        "parAb": "(",
+                        "cuerpoImprimir": {
+                          "HTMLPROD": "</HTML>"
+                        },
+                        "parCierra": ")",
+                        "pntComa": ";"
+                      }
+                    }
+                  }
+                ],
+                "LLAVECIERRA": "}"
+              },
+              "ELSE": "else",
+              "LLAVEABRE": "{",
+              "sentencia_listado": [
+                {
+                  "sentencia": {
+                    "variablesManejo": {
+                      "asignacion": {
+                        "ID": "txtpantalla",
+                        "IGUAL": "=",
+                        "expresion": {
+                          "expCadena": {
+                            "expCadena": {
+                              "CADENA": "1"
+                            },
+                            "MAS": "+"
+                          }
+                        },
+                        "PTCOMA": ";"
+                      }
+                    }
+                  }
+                }
+              ],
+              "LLAVECIERRA": "}"
+            }
+          }
+        }
+      ],
+      "LLAVECIERRA": "}"
+    }
+  }
+]
