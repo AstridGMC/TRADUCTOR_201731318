@@ -20,6 +20,6 @@
   },
   "devDependencies": {
     "nodemon": "^2.0.4",
-    "html2json": "1.0.2"
+    "xml2json": "0.12.0" 
   }
 }

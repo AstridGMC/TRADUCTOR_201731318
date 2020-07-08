@@ -1,32 +1,33 @@
 class Error{
 
-    constructor (linea, columna, lexema){
+    constructor (linea, columna, lexema, tipo){
         this.linea = linea;
         this.columna=columna;
         this.lexema=lexema;
+        this.tipo=tipo;
     }
     
     set Tipo(tipo){
         this.tipo = tipo;
     }
-    set linea(line){
+    set Linea(line){
         this._linea = line;
     }
-    set columna(columna){
+    set Columna(columna){
         this._columna = columna;
     }
-    set lexema(lexema){
+    set Lexema(lexema){
         this._lexema = lexema;
     }
-    get linea(){
+    get Linea(){
         return this.linea;
     }
 
-    get columna(){
+    get Columna(){
         return this.columna;
     }
 
-    get lexema(){
+    get Lexema(){
         return this.lexema;
     }
 

@@ -38,7 +38,7 @@ const crearBotonPest = item => {
 
 function ingresarTexto(item) {
   contenido = document.getElementById(item).firstChild.value;
-  console.log(contenido + '88')
+  //console.log(contenido + '88')
 }
 
 function crearDivCuerpo(item, cuerpo) {
@@ -75,7 +75,7 @@ function nuevaTab(nombeTab, contenido) {
 }
 var p = 1;
 function archivoNuevo() {
-  var nombre = 'NUEVO' + p;
+  var nombre = 'NUEVO' + p+'.cs';
   crearDivCuerpo(nombre, '');
   crearBotonPest(nombre);
   nombreArchivo = nombre;
@@ -104,9 +104,11 @@ function leerArchivo(e) {
 
 };
 
+var errores;
+
 document.getElementById('abrir')
   .addEventListener('change', leerArchivo, false);
-
+var variables = [];
 function enviar() {
   console.log('funciona');
   axios.post('http://localhost:3000/code', {
@@ -115,8 +117,9 @@ function enviar() {
   }).then(response => {
     htmlAr = response.data.html;
     jsonHtml = response.data.json;
+    variables = response.data.varia;
+    errores = response.data.error;
     console.log(response);
-    
   }).catch(error => {
     console.log(error);
   })
@@ -124,15 +127,14 @@ function enviar() {
 }
 var htmlAr;
 var jsonHtml;
-function guardarHTML() {
+function guardarDoc() {
   console.log('funciona');
-  axios.post('http://localhost:3000/guardarHTML', {
-    html: docHTML,
-    json: htmlJason
+  axios.post('http://localhost:3000/guardar', {
+    documento: contenido,
+    nombre: nombreArchivo
   }).then(response => {
-    htmlAr = response.data.html;
-    jsonHtml = response.data.html;
-    llenarTablaHtmlJson();
+    ;
+    console.log('guardado');
   }).catch(error => {
     console.log(error);
   })
@@ -149,18 +151,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
 var docHTML;
 var htmlJason;
 
-function solicitar() {
-  axios.get('http://localhost:3000/recibirDatos').
-    then(response => {
-      docHTML = response.data.docHTML;
-      htmlJason = response.data.htmlJason;
-      console.log(docHTML);
-      console.log(response.data.htmlJason);
-    }).
-    catch(error => {
-      console.log(error);
-    })
-};
 
 function llenarTablaHtmlJson() {
   console.log('.........camboiandiiii');
@@ -171,23 +161,59 @@ function llenarTablaHtmlJson() {
   htmlTEXT.appendChild(textNode);
   var textNode2 = document.createTextNode(jsonHtml);
   jsonTEXT.appendChild(textNode2);
+
 };
 
-function llenarTablaVariables(variables){
-  encabezado = ' <table class=table table-bordered> '+
-          '<thead class=thead - dark>'+
-          ' <tr><th scope = col >TIPO</th>' +
-          '<th scope = col > NOMBRE </ th >' +
-          '<th scope = col> LINEA </ th > '+
-          '</tr > </thead > <tbody>';
-          cuerpo='';
-          for(var i=0;i<variables.length; i++){
-            cuerpo=cuerpo+
-            '<tr> ' +
-            '<td> ' + variables.tipo + '</td > \n' +
-            '<td > ' + token.ID + ' </td >\n' +
-            '<td > ' + token.linea + ' </td >\n' +
-            '</ tr > ';
-          }
-          cuerpo = cuerpo + '</tbody>\n</table>\n ' ;
+function llenarTablaVariables() {
+  console.log('llenando Variables');
+  if (variables != undefined) {
+    var cuerpo = '';
+    var encabezado = ' <table class=table table-bordered> ' +
+      '<thead class=thead-dark>' +
+      ' <tr><th scope = col >TIPO</th>' +
+      '<th scope = col > NOMBRE </ th >' +
+      '<th scope = col> LINEA </ th > ' +
+      '</tr > </thead > <tbody>';
+    cuerpo = encabezado;
+    for (var i = 0; i < variables.length; i++) {
+      cuerpo = cuerpo +
+        '<tr> ' +
+        '<td> ' + variables[i].tipo + '</td > \n' +
+        '<td > ' + variables[i].ID + ' </td >\n' +
+        '<td > ' + variables[i].linea + ' </td >\n' +
+        '</ tr > ';
+    }
+    cuerpo = cuerpo + '</tbody>\n</table>\n ';
+    var divTabla = document.getElementById('divTabla');
+    divTabla.innerHTML = cuerpo;
+  }
 }
+
+function llenarTablaErrores() {
+  console.log('llenando Errores');
+  if (errores != undefined) {
+    var cuerpo = '';
+    var encabezado = ' <table class=table table-bordered> ' +
+      '<thead class=thead-dark>' +
+      ' <tr><th scope = col >TIPO</th>' +
+      '<th scope = col > LEXEMA </ th >' +
+      '<th scope = col> LINEA </ th > ' +
+      '<th scope = col> COLUMNA </ th > ' +
+      '</tr > </thead > <tbody>';
+    cuerpo = encabezado;
+    for (var i = 0; i < errores.length; i++) {
+      cuerpo = cuerpo +
+        '<tr> ' +
+        '<td> ' + errores[i].tipo + '</td > \n' +
+        '<td > ' + errores[i].lexema + ' </td >\n' +
+        '<td > ' + errores[i].linea + ' </td >\n' +
+        '<td > ' + errores[i].columna + ' </td >\n' +
+        '</ tr > ';
+    }
+    cuerpo = cuerpo + '</tbody>\n</table>\n ';
+    var divTabla1 = document.getElementById('divTablaErrores');
+    divTabla1.innerHTML = cuerpo;
+  }
+}
+
+

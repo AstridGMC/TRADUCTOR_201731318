@@ -24,6 +24,7 @@
       </div>
       <div style="padding-left: 45%;">
         <button type="button" class="btn btn-primary btn-lg" id="enviar">Analizar</button>
+        <button type="button" class="btn btn-primary btn-lg" onclick=" llenarTablaVariables();" id="VER VARIABLES">VER VARIABLES</button>
       </div>
     </div>
     <div style="width: 100%; padding-top: 20px;">
@@ -43,51 +44,24 @@
             <a href="#dos" class="tab-e">Json</a>
             <div id="pnl_1">
               <div style="background-color: #fff;height: 361px;">
-                <p id="textoHtml"></p>
+                <textarea id="textoHtml" style="height: 100%; width: 100%;"readonly></textarea>
               </div>
             </div>
             <div id="pnl_2">
               <div style="background-color: #fff;height: 361px;">
-                <p id="textoJson"></p>
+                <textarea id="textoJson" style="height: 100%; width: 100%;"  readonly></textarea>
               </div>
             </div>
           </div>
         </section>
       </div>
-      <div style="padding-right: 10%; padding-left: 10%; " id="divTabla">
-        <table class="table table-bordered" id="tablaVariables">
-          <thead class="table-dark">
-            <tr>
-              <th scope="col">Nombre</th>
-              <th scope="col"class="text-center">tipo</th>
-              <th scope="col" class="text-center">Linea</th>
-            </tr>
-          </thead>
-          <tbody style="background-color: white;">
-            <tr>
-              <td scope="row">1</td>
-              <td>Nissan</td>
-              <td>Qasqai</td>
-            </tr>
-            <tr>
-              <td scope="row">2</td>
-              <td>Seat</td>
-              <td>Ibiza</td>
-            </tr>
-            <tr>
-              <td scope="row">3</td>
-              <td>Citroen</td>
-              <td>Saxo</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
     </div>
-  <div style="height: 400px;">
-    <div id="jstree">
-    </div>
-    
   </div>
+  <div style="padding-right: 10%; padding-left: 10%;" id="divTabla">
+  </div>
+<div style="padding-right: 10%; padding-left: 10%;" id="divTablaErrores">
+
+</div>
 </body>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script src="../script/InsertarArchivo.js"> </script>

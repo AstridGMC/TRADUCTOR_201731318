@@ -9,18 +9,18 @@ class Variable{
     set Tipo(tipo){
         this.tipo = tipo;
     }
-    set linea(line){
-        this._linea = line;
+    set Linea(linea){
+        this.linea = linea;
     }
-    set ID(ID){
-        this._ID = ID;
+    set Id(ID){
+        this.ID = ID;
     }
     
-    get linea(){
+    get Linea(){
         return this.linea;
     }
 
-    get ID(){
+    get Id(){
         return this.ID;
     }
 

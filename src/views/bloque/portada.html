@@ -23,7 +23,7 @@
            <div class="dropdown-content1">
                <a onclick="archivoNuevo()" id = "nuevoArchivo">Nuevo</a>
                <a>Abrir <input id="abrir" type="file" name="file" accept=".cs" required></input></a>
-               <a >Guardar </a>
+               <a onclick="guardarDoc()">Guardar </a>
                <a >Guardar Como </a>
            </div>
        </div>
@@ -33,12 +33,11 @@
            </button>
            <div class="dropdown-content1">
                <a>Salida Pyton</a>
-               <a  onclick="llenarTablaHtmlJson()" id='generarHtml'>Salida Html</a>
-               <a >Errores</a>
+               <a onclick="llenarTablaHtmlJson()" id='generarHtml'>Salida Html</a>
+               <a onclick="llenarTablaErrores()" id= 'erroresDoc'>Errores</a>
            </div>
        </div>
    </div>
 </nav></div>
   </div>
-  <script src="../script/scriptPest.js"></script>
 </div>

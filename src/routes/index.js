@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const parser = require('../script/gramatica.js');
-var htmlToJson = require('html-to-json');
+const xmlParser = require('xml2json');
 const fs = require('fs');
 var himalaya = require('himalaya');
 
@@ -23,21 +23,19 @@ router.post('/code', (req, res) => {
   contAnalizar = req.body.content;
   nombreArch = req.body.nombre;
   analizar(contAnalizar);
-  res.send({ html: htmlArch, json: jsonHTML });
+  const variables = require('../script/gramatica.js').VARIABLES;
+  const errores = require('../script/gramatica.js').ERRORES;
+  guardarHtmlF(htmlArch, jsonHTML);
+  res.send({ html: htmlArch, json: jsonHTML , varia:variables,error: errores  });
 });
 
-router.post('/guardarHTML', (req, res) => {
-  htmlAr = req.body.html;
-  jsonAr = req.body.json;
-  guardarHtmlF(htmlAr, jsonAr);
-  res.send('funciona htmlG');
-});
-
-router.get('/recibirDatos', (req, res) => {
-  res.json({
-    docHTML: htmlArch,
-    htmlJason: jsonHTML
-  });
+var doc;
+var nom;
+router.post('/guardar', (req, res) => {
+  doc= req.body.documento;
+  nom= req.body.nombre;
+  guardarDoc(doc, nom)
+  res.send('guardado');
 });
 
 router.get('/favicon.ico', (req, res) => {
@@ -61,13 +59,21 @@ function analizar(entrada) {
 
 function combertirHtml(html) {
   console.log('combirtienddoooooo');
-  var json = himalaya.parse(html);
-  jsonHTML= JSON.stringify(json);
-  
- // console.dir(json, {colors: true, depth: null});
+  var json = xmlParser.toJson(html);
+  jsonHTML =xmlParser.toJson(html);
+  console.log('JSON output', xmlParser.toJson(html));
+   console.log(json);
 }
 
+function guardarDoc(doc, nombre){
+  fs.writeFile(nombre, doc, function (err) {
+    if (err) {
+      return console.log(err);
+    }
 
+    console.log("El archivo 1 fue creado correctamente");
+  });
+}
 function guardarHtmlF(html, jsonA) {
 
   fs.writeFile("salidaHtml.html", html, function (err) {
@@ -75,7 +81,7 @@ function guardarHtmlF(html, jsonA) {
       return console.log(err);
     }
 
-    //console.log("El archivo fue creado correctamente");
+    console.log("El archivo 1 fue creado correctamente");
   });
 
   fs.writeFile("salidaHtmlJson.json", jsonA, function (err) {
@@ -83,9 +89,7 @@ function guardarHtmlF(html, jsonA) {
       return console.log(err);
     }
 
-    console.log("El archivo fue creado correctamente");
+    console.log("El archivo 2 fue creado correctamente");
   });
 }
-
-
 module.exports = router;

@@ -2,6 +2,7 @@
 	const Error = require('./Error.js');
 	var erroresLexicos = [];
 	var variables=[];
+	var errores = [];
 %}
 /* Definición Léxica */
 %lex
@@ -25,7 +26,7 @@
 "main"                  {console.log('Token: MAIN, Lexema: ' + yytext + ', linea: ' + yylloc.first_line + ' columna: ' + yylloc.first_column);return 'MAIN';}
 "Console"   			{console.log('Token: CONSOLE,, Lexema: ' + yytext + ', linea: ' + yylloc.first_line + ' columna: ' + yylloc.first_column);return 'CONSOLE';}
 "Write"  				{console.log('Token: ' + yytext + ', linea: ' + yylloc.first_line + ' columna: ' + yylloc.first_column);return 'WRITE'}
-"switch"                {console.log('Token: ' + yytext + ', linea: ' + yylloc.first_line + ' columna: ' + yylloc.first_column);return 'SWITCH';}
+"switch"                {console.log('Token: SWITCH, Lexema:' + yytext + ', linea: ' + yylloc.first_line + ' columna: ' + yylloc.first_column);return 'SWITCH';}
 "case"                  {console.log('Token: ' + yytext + ', linea: ' + yylloc.first_line + ' columna: ' + yylloc.first_column);return 'CASE';}
 "default"				{console.log('Token: ' + yytext + ', linea: ' + yylloc.first_line + ' columna: ' + yylloc.first_column);return 'DEFAULT';}
 
@@ -88,18 +89,21 @@
 
 
 <<EOF>>				return 'EOF';
-.                       {console.log('Este es un error léxico: ' + yytext + ', en la linea: ' + yylloc.first_line + ', en la columna: ' + yylloc.first_column); }
+.                       {console.log('Este es un error léxico: ' + yytext + ', en la linea: ' + yylloc.first_line + ', en la columna: ' + yylloc.first_column); 
+						errores.push(new Error(yylloc.first_line ,yylloc.first_column, yytext, 'lexico'))}
 /lex
 
 %{
 	var id;
 	var html1='';
-	var erroresSintacticos = [];
+
 	var variables1=[];
 	var VariableN= require('./Variable.js');
 	const TIPOSVALORES	= require('./nombrarDato').TIPOSVALORES;
 	const VALORCONDICIONAL_Y_LOGICO	= require('./nombrarDato').VALORCONDICIONAL_Y_LOGICO;
 	const FORMISTR= require('./nombrarDato').formarInstrucciones;
+	module.exports.ERRORES= errores;
+		
 %}
 %left 'MAS'
 %left  'MENOS'
@@ -111,7 +115,7 @@
 
 ini
 	: inicio EOF {
-		module.exports.variables1;
+		module.exports.VARIABLES= variables1;
 		module.exports.HTMLARCH=html1;
 		// cuado se haya reconocido la entrada completa retornamos el AST
 		return $1;
@@ -119,10 +123,10 @@ ini
 ;
 
 inicio
-	:inicio opciones	{$1.push($2); $$ = $1; console.log('finopciones');console.log(variables1.length);}
+	:inicio opciones	{$1.push($2); $$ = $1; console.log('finopciones');console.log(variables1.length); console.log(errores.length);}
 	|opciones 			{$$=[$1];console.log('opciones'); ID='';}
-	|error  { console.error('Este es un error sintáctico if: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column);
-	 erroresSintacticos.push(new Error( this._$.first_line ,this._$.first_column, yytext));}
+	|error  { console.error('Este es un error sintáctico : ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column);
+	 errores.push(new Error( this._$.first_line ,this._$.first_column, yytext, 'sintactico'));}
 ;	
 
 main	
@@ -143,7 +147,7 @@ opciones
 opciones1
 	:declaracion 	{$$= FORMISTR.funcionOpciones12($1);console.log('declaracion');}
 	|funcion		{$$= FORMISTR.funcionOPciones11($1);console.log('funcion');}
-
+	
 ;
 
 asignacion
@@ -161,8 +165,8 @@ declaracion
 ; 
 
 IDmas	
-		:IDmas COMA ID	{$1.push(FORMISTR.funcionIDMAS($2)); $$ = $1;console.log('ID2');ID= ID+', '+$2;}
-		|ID				{$$=FORMISTR.funcionIDMAS($1);console.log('id1'); ID= $1}
+		:IDmas COMA ID	{$1.push(FORMISTR.funcionIDMAS($3)); $$ = $1; ID=( ID+', '+$2);}
+		|ID				{$$=[FORMISTR.funcionIDMAS($1)]; ID= $1;}
 ;
 
 expresion	
@@ -231,6 +235,8 @@ sentencia
 		|imprimir			{$$= FORMISTR.funcionSentencia7($1);}
 		|variablesManejo	{$$= FORMISTR.funcionSentencia8($1);}
 		|declaredFuncion PTCOMA {console.log('declaredFuncion');$$= FORMISTR.funcionSentencia9($1);}
+		|RETURN expresion {$$= FORMISTR.funcionSentencia10($1,$2);}
+		|BREAK 		{$$=FORMISTR.funcionSentencia11($1);}
 ;		
 
 imprimir
@@ -250,6 +256,8 @@ sentenciaCiclos
 sentenciaCiclos2 
 		:sentencia	{$$=FORMISTR.fucionSentenciaCiclos2_1($1);}
 		|ifbreak	{$$=FORMISTR.fucionSentenciaCiclos2_2($1);}
+		|BREAK 		{$$=FORMISTR.fucionSentenciaCiclos2_3($1);}
+		|CONTINUE	{$$=FORMISTR.fucionSentenciaCiclos2_4($1);}
 ;
 
 sentencia_listado		
@@ -260,17 +268,19 @@ sentencia_listado
 sentenciaIfElse	
 		:ifS ELSE LLAVEABRE sentencia_listado LLAVECIERRA	{$$=FORMISTR.fucionSentenciaIfElse2($1,$4);}
 		|ifS ELSE LLAVEABRE LLAVECIERRA		  				{$$=FORMISTR.fucionSentenciaIfElse2($1,' ');}
+		|ifS ELSE sentenciaIfElse 		  					{$$=FORMISTR.fucionSentenciaIfElse2($1,$3);}
+		|ifS												{$$=FORMISTR.fucionSentenciaIfElse2($1);}
 ;
 
 ifS		
 		:IF PARABRE ExpresionLogica PARCIERRA sentencia 								{$$=FORMISTR.funcionIf1($3,$5);console.log('if 1');}
 		|IF PARABRE ExpresionLogica PARCIERRA LLAVEABRE sentencia_listado LLAVECIERRA	{$$=FORMISTR.funcionIf2($3,$6);console.log('if 2');}
 		|IF PARABRE ExpresionLogica PARCIERRA LLAVEABRE LLAVECIERRA						{$$=FORMISTR.funcionIf2($3, ' ');console.log('if vacio');}
-		;
+;
 
 ifBreak	
-		:IF PARABRE ExpresionLogica PARCIERRA	BREAK PTCOMA								{$$=FORMISTR.funcionIfBreak1($3);console.log('if 1');}
-		|IF PARABRE ExpresionLogica PARCIERRA LLAVEABRE sentencia_Listado BREAK LLAVECIERRA	{$$=FORMISTR.funcionIfBreak2($3,$6);console.log('if 2');}
+		:IF PARABRE ExpresionLogica PARCIERRA									{$$=FORMISTR.funcionIfBreak1($3);console.log('if 1');}
+		|IF PARABRE ExpresionLogica PARCIERRA LLAVEABRE sentencia_Listado  LLAVECIERRA	{$$=FORMISTR.funcionIfBreak2($3,$6);console.log('if 2');}
 ;
 
 while		
@@ -284,8 +294,10 @@ do-while
 ;
 
 for		
-		:FOR PARABRE variablesManejo PTCOMA ExpresionLogica PTCOMA incremento PARCIERRA LLAVEABRE sentencia_Listado LLAVECIERRA	
-		{$$=FORMISTR.funcionFor($3, $5, $7, $10);}
+		:FOR PARABRE variablesManejo ExpresionLogica PTCOMA incremento PARCIERRA LLAVEABRE sentenciaCiclos LLAVECIERRA	
+		{$$=FORMISTR.funcionFor($3, $4, $6,$9);console.log('sentencia For');}
+		|FOR PARABRE variablesManejo ExpresionLogica PTCOMA incremento PARCIERRA LLAVEABRE LLAVECIERRA	
+		{$$=FORMISTR.funcionFor($3, $4, $6,' ');console.log('sentencia For');}
 ;
 
 ExpresionLogica	
@@ -296,8 +308,8 @@ ExpresionLogica
 ;
 
 incremento			
-		:aumento			{$$=FORMISTR.funcionIncremento1($1);}
-		|exp				{$$=FORMISTR.funcionIncremento2($1);}
+		:aumento			{$$=FORMISTR.funcionIncremento1($1);console.log('incremento1');}
+		|exp				{$$=FORMISTR.funcionIncremento2($1);console.log('incremento2');}
 ;
 
 aumento		
@@ -308,19 +320,18 @@ aumento
 
 
 switchCase	
-		:
-		 SWITCH PARABRE ID PARCIERRA LLAVEABRE cuerpoCase LLAVECIERRA {$$= FORMISTR.funcionswitchCase($3, $6);}
-		|SWITCH PARABRE ID PARCIERRA LLAVEABRE cuerpoCase default PTCOMA LLAVECIERRA {$$= FORMISTR.funcionswitchCaseDefault($3, $6, s7);}
+		:SWITCH PARABRE expresion PARCIERRA LLAVEABRE cuerpoCase LLAVECIERRA {$$= FORMISTR.funcionswitchCase($3, $6); console.log('swictc case');}
+		|SWITCH PARABRE expresion PARCIERRA LLAVEABRE cuerpoCase default PTCOMA LLAVECIERRA {$$= FORMISTR.funcionswitchCaseDefault($3, $6, s7); console.log('swictc case');}
 ;
 
 cuerpoCase	
-		:cuerpoCase case { $1.push($2); $$ = $1; }
-		|case { $$ = [$1]; }
+		:cuerpoCase case { $1.push($2); $$ = $1; console.log('cuerpocases')}
+		|case { $$ = [$1]; console.log('cuerpocase')}
 ;
 
 case	
-		:CASE ID DOSPUNTOS PTCOMA 				{$$= FORMISTR.funcionCase($2);}
-		|CASE ID DOSPUNTOS sentenciaBreakCase 	{$$=FORMISTR.funcionCaseBrake($2, sentenciaBreakCase);}
+		:CASE exp DOSPUNTOS PTCOMA 				{$$= FORMISTR.funcionCase($2);}
+		|CASE exp DOSPUNTOS sentenciaBreakCase 	{$$=FORMISTR.funcionCaseBrake($2, $4);}
 ;	
 
 
@@ -332,9 +343,10 @@ default
 ;
 
 sentenciaBreakCase	
-		:sentencia_Listado						{$$=	FORMISTR.funcionSentenciaBreakCase1($1);}
-		|sentencia_Listado BREAK PTCOMA			{$$=	FORMISTR.funcionSentenciaBreakCase1($1);}
-		|BREAK PTCOMA							{$$= 	FORMISTR.funcionSentenciaBreakCase3();}
+		:sentencia_Listado						{$$=FORMISTR.funcionSentenciaBreakCase1($1);}
+		|sentencia_Listado BREAK				{$$=FORMISTR.funcionSentenciaBreakCase1($1);}
+		|BREAK									{$$=	FORMISTR.funcionSentenciaBreakCase3();}
+
 ;	
 
 expCadena 
@@ -351,7 +363,7 @@ exp
 		| exp MAS exp			{$$= FORMISTR.funcionEXP2($1,$3, '+');}
 		| PARABRE exp PARCIERRA	{$$= FORMISTR.funcionEXP1($1);}
 		|PARABRE error PARCIERRA { console.error('Este es un error sintáctico if: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column);
-	 		erroresSintacticos.push(new Error( this._$.first_line ,this._$.first_column, yytext));}
+	 		errores.push(new Error( this._$.first_line ,this._$.first_column, yytext, 'lexico'));}
 		|ENTERO					{$$= FORMISTR.newDato($1,"int" );}
 		|DOUBLE					{$$= FORMISTR.newDato($1,"double" );}
 		|CARACTER				{$$= FORMISTR.newDato($1,"char" );}

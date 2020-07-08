@@ -128,7 +128,7 @@ const formarInstrucciones = {
         }
     }, funciondDeclaracion2: function (tipoDato, ID, expresion) {
         return {
-            ID: ID,
+            id: ID,
             PTCOMA: ';'
         }
     },
@@ -168,6 +168,12 @@ const formarInstrucciones = {
 
         return {
             main: sentencias
+        }
+    },
+    funcionOpcionesSentencia: function (sentencias) {//=--------
+
+        return {
+            sentencia: sentencias
         }
     },
     funciondDeclaracion2: function (tipoDato, ID) {//''''''''''
@@ -337,7 +343,7 @@ const formarInstrucciones = {
     variableManejo2: function (tipo, declaracion) {//'''''''''''
         return {
             tipoDato: tipo,
-            declaracion: declaracion
+            declaracionVar: declaracion
         }
     },
 
@@ -367,7 +373,7 @@ const formarInstrucciones = {
     },
     funcionIDMAS: function (params) {//--------
         return {
-            ID: params
+            idMas: params
         }
 
     },
@@ -431,6 +437,15 @@ const formarInstrucciones = {
         return {
             variablesManejo: CUERPO
         }
+    },funcionSentencia10: function (RET, CUERPO) {/* -----------*/
+        return {
+            RETURN: RET,
+            expresion: CUERPO
+        }
+    },funcionSentencia11: function (CUERPO) {/* -----------*/
+        return {
+            RETURN: CUERPO
+        }
     },
     funcionSentencia9: function (CUERPO) {/* -----------*/
         return {
@@ -474,6 +489,14 @@ const formarInstrucciones = {
         return {
             ifbreak: sentencia
         }
+    },fucionSentenciaCiclos2_3: function (sentencia) {/* -----------*/
+        return {
+            break: sentencia
+        }
+    },fucionSentenciaCiclos2_4: function (sentencia) {/* -----------*/
+        return {
+            continue: sentencia
+        }
     },
     fucionSentencia_listado: function (sentencia) {/* -----------*/
         return {
@@ -497,6 +520,19 @@ const formarInstrucciones = {
             LLAVECIERRA: '}'
         }
 
+    },
+    fucionSentenciaIfElse3: function (ifS, sentencia_IfElse) {/* -----------*/
+        return {
+            ifS: ifS,
+            ELSE: 'else',
+            ifS:sentencia_IfElse
+        }
+
+    },
+    fucionSentenciaIfElse4: function (ifS) {/* -----------*/
+        return {
+            ifS: ifS
+        }
     },
     funcionIf1: function (ExpresionLogica, sentencia) {/* -----------*/
         return {
